@@ -9,13 +9,19 @@
                 :key="n"
                 cols="12" 
                 md="2">
-                    <v-card @click="clickAnime(n.id)">
+                    <v-card 
+                    @click="clickAnime(n.id)"
+                    class="anime-card"
+                    hover
+                    >
                         <v-img
                         :src="n.Image"
                         height="400"
                         cover
                         ></v-img>
-                        <p>{{ n.Name }}</p>
+                        <v-card-title class="text-wrap pa-3">
+                            {{ n.Name }}
+                        </v-card-title>
                     </v-card>   
                 </v-col>
             </v-row>
@@ -60,3 +66,22 @@ export default defineComponent({
 })
 
 </script>
+
+<style scoped>
+.anime-card {
+  overflow: visible;
+}
+
+.anime-card :deep(.v-card-title) {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  min-height: auto;
+  line-height: 1.4;
+  padding: 12px !important;
+}
+
+.anime-card :deep(.v-img) {
+  border-radius: 4px 4px 0 0;
+}
+</style>

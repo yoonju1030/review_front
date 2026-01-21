@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-layout>
+    <v-layout class="app-layout">
       <v-navigation-drawer
         expand-on-hover
         rail
@@ -49,7 +49,7 @@
         </v-list>
         
       </v-navigation-drawer>
-      <v-main>
+      <v-main class="app-main">
         <router-view/>
       </v-main>
     </v-layout>
@@ -119,3 +119,16 @@ export default defineComponent({
     },
 })
 </script>
+
+<style>
+/* Make v-main the scroll container so pages can scroll reliably */
+.app-layout {
+  height: 100vh;
+}
+
+.app-main {
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+</style>

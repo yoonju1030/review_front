@@ -1,0 +1,26 @@
+:root {
+    color-scheme: dark;
+  }
+  
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+  
+  body {
+    margin: 0;
+    overflow-y: auto;
+    background: radial-gradient(1200px 800px at 20% 10%, rgba(124, 58, 237, 0.25), transparent 55%),
+      radial-gradient(1000px 700px at 80% 20%, rgba(6, 182, 212, 0.18), transparent 55%),
+      linear-gradient(180deg, #0b1020 0%, #060814 100%);
+  }
+  
+  /* Better default text rendering */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  
+  

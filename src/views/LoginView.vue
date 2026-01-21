@@ -1,60 +1,70 @@
 <template>
-  <v-sheet 
-  class="bg-deep-purple" 
-  height="100%"
-  rounded>
-  <br/>
-    <v-card class="mx-auto px-6 py-8" max-width="344">
-      <v-form
-        v-model="form"
-        @submit.prevent="onSubmit"
-      >
-        <v-text-field
-          v-model="id"
-          :readonly="loading"
-          :rules="[required]"
-          class="mb-2"
-          label="Id"
-          clearable
-        ></v-text-field>
+  <div class="auth-page">
+    <v-container class="fill-height" fluid>
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="10" md="6" lg="4">
+          <v-card class="auth-card mx-auto px-6 py-8">
+            <div class="d-flex align-center mb-2">
+              <v-icon class="mr-2" color="primary" icon="mdi-login"></v-icon>
+              <div class="text-h6 font-weight-bold">Welcome back</div>
+            </div>
+            <div class="text-body-2 text-medium-emphasis mb-6">
+              로그인하여 계속하세요.
+            </div>
 
-        <v-text-field
-          v-model="password"
-          :readonly="loading"
-          :rules="[required]"
-          type="password"
-          label="Password"
-          placeholder="Enter your password"
-          clearable
-        ></v-text-field>
+            <v-form v-model="form" @submit.prevent="logIn">
+              <v-text-field
+                v-model="id"
+                :readonly="loading"
+                :rules="[required]"
+                class="mb-3"
+                label="Id"
+                prepend-inner-icon="mdi-account"
+                clearable
+              ></v-text-field>
 
-        <br>
+              <v-text-field
+                v-model="password"
+                :readonly="loading"
+                :rules="[required]"
+                class="mb-3"
+                type="password"
+                label="Password"
+                prepend-inner-icon="mdi-lock"
+                placeholder="Enter your password"
+                clearable
+              ></v-text-field>
 
-        <v-btn
-          :disabled="!form"
-          :loading="loading"
-          color="success"
-          size="large"
-          type="submit"
-          variant="elevated"
-          block
-          @click="logIn"
-        >
-          Sign In
-        </v-btn>
-      </v-form>
-      <br/>
-      <v-btn
-          color="grey-lighten-2"
-          size="large"
-          type="submit"
-          variant="elevated"
-          block
-          @click="move"
-        >
-          Sign Up
-        </v-btn>
-    </v-card>
+              <v-btn
+                :disabled="!form"
+                :loading="loading"
+                color="primary"
+                size="large"
+                type="submit"
+                variant="flat"
+                block
+              >
+                Sign In
+              </v-btn>
+            </v-form>
+
+            <v-divider class="my-6"></v-divider>
+
+            <v-btn
+              color="secondary"
+              size="large"
+              variant="outlined"
+              block
+              @click="move"
+            >
+              <v-icon class="mr-2" icon="mdi-account-plus"></v-icon>
+              Sign Up
+            </v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <v-overlay
       :model-value="overlay"
       class="align-center justify-center"
@@ -66,7 +76,7 @@
         indeterminate
       ></v-progress-circular>
     </v-overlay>
-  </v-sheet>
+  </div>
 </template>
 <script>
 import { defineComponent, ref } from 'vue'
@@ -120,3 +130,16 @@ export default defineComponent({
     },
 })
 </script>
+
+<style scoped>
+.auth-page {
+  min-height: 100vh;
+  padding: 24px 0;
+}
+
+.auth-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 26, 51, 0.72);
+  backdrop-filter: blur(10px);
+}
+</style>

@@ -1,88 +1,98 @@
 <template>
-    <v-sheet 
-    class="bg-deep-purple" 
-    height="100%"
-    rounded>
-    <br/>
-      <v-card class="mx-auto px-6 py-8" max-width="344">
-        <v-form
-          v-model="form"
-          @submit.prevent="onSubmit"
-        >
-          <v-text-field
-            v-model="id"
-            :readonly="loading"
-            :rules="[required, checkIdValidation]"
-            class="mb-2"
-            label="Id"
-            clearable
-          ></v-text-field>
-          <v-text-field
-            v-model="password"
-            :readonly="loading"
-            :rules="[required, checkValidPassword]"
-            class="mb-2"
-            type="password"
-            label="Password"
-            placeholder="Enter your password"
-            clearable
-          ></v-text-field>
-          <v-text-field
-            v-model="password2"
-            :readonly="loading"
-            :rules="[required, checkSamePassword]"
-            class="mb-2"
-            type="password"
-            label="Password check"
-            placeholder="Enter your password"
-            clearable
-          ></v-text-field>
-  
-          <br>
-  
-          <v-btn
-            :disabled="!form"
-            :loading="loading"
-            color="success"
-            size="large"
-            type="submit"
-            variant="elevated"
-            block
-            @click="signup"
-          >
-            Sign Up
-          </v-btn>
-        </v-form>
-        <br/>
-        <v-overlay
-          :model-value="overlay"
-          class="align-center justify-center"
-          :persistent="true"
-        >
-          <v-progress-circular
-            color="primary"
-            size="64"
-            indeterminate
-          ></v-progress-circular>
-        </v-overlay>
-        <v-alert
-          v-model="alert"
-          border="start"
-          close-label="Close Alert"
-          :color="alertColor"
-          :title="title"
-          variant="tonal"
-          closable
-        >
-          {{resultMessage}}
-        </v-alert>
-      </v-card>
-    </v-sheet>
+  <div class="auth-page">
+    <v-container class="fill-height" fluid>
+      <v-row align="center" justify="center">
+        <v-col cols="12" sm="10" md="6" lg="4">
+          <v-card class="auth-card mx-auto px-6 py-8">
+            <div class="d-flex align-center mb-2">
+              <v-icon class="mr-2" color="secondary" icon="mdi-account-plus"></v-icon>
+              <div class="text-h6 font-weight-bold">Create account</div>
+            </div>
+            <div class="text-body-2 text-medium-emphasis mb-6">
+              아이디와 비밀번호를 입력해 회원가입을 완료하세요.
+            </div>
+
+            <v-form v-model="form" @submit.prevent="signup">
+              <v-text-field
+                v-model="id"
+                :readonly="loading"
+                :rules="[required, checkIdValidation]"
+                class="mb-3"
+                label="Id"
+                prepend-inner-icon="mdi-account"
+                clearable
+              ></v-text-field>
+
+              <v-text-field
+                v-model="password"
+                :readonly="loading"
+                :rules="[required, checkValidPassword]"
+                class="mb-3"
+                type="password"
+                label="Password"
+                prepend-inner-icon="mdi-lock"
+                placeholder="영문+숫자 8자리 이상"
+                clearable
+              ></v-text-field>
+
+              <v-text-field
+                v-model="password2"
+                :readonly="loading"
+                :rules="[required, checkSamePassword]"
+                class="mb-2"
+                type="password"
+                label="Password check"
+                prepend-inner-icon="mdi-lock-check"
+                placeholder="비밀번호를 다시 입력"
+                clearable
+              ></v-text-field>
+
+              <v-btn
+                :disabled="!form"
+                :loading="loading"
+                color="primary"
+                size="large"
+                type="submit"
+                variant="flat"
+                block
+              >
+                Sign Up
+              </v-btn>
+            </v-form>
+
+            <v-alert
+              v-model="alert"
+              class="mt-5"
+              border="start"
+              close-label="Close Alert"
+              :color="alertColor"
+              :title="title"
+              variant="tonal"
+              closable
+            >
+              {{ resultMessage }}
+            </v-alert>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-overlay
+      :model-value="overlay"
+      class="align-center justify-center"
+      :persistent="true"
+    >
+      <v-progress-circular
+        color="primary"
+        size="64"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
+  </div>
   </template>
   <script>
   import { defineComponent, ref } from 'vue'
   import { checkDuplicatedId, signUpUser } from "../api/users";
-  import commonObj from "../utils/common"
   
   export default defineComponent({
       setup() {
@@ -131,7 +141,8 @@
 
           const signup = async () => {
             overlay.value = !overlay.value
-            const encryptedPassword = await commonObj.encryptData(password.value)
+            // const encryptedPassword = await commonObj.encryptData(password.value)
+            const encryptedPassword = password.value
             console.log(encryptedPassword)
             const requestParams = {id: id.value, password: password.value}
             const insertedId = await signUpUser(requestParams)
@@ -172,4 +183,17 @@
       },
   })
   </script>
+
+  <style scoped>
+  .auth-page {
+    min-height: 100vh;
+    padding: 24px 0;
+  }
+
+  .auth-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(17, 26, 51, 0.72);
+    backdrop-filter: blur(10px);
+  }
+  </style>
   
