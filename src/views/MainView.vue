@@ -5,8 +5,8 @@
         <v-card>
             <v-row>
                 <v-col
-                v-for="n in list.filter(l => (l.idx < page * totalCount) & (l.idx >= (page-1) * totalCount))"
-                :key="n"
+                v-for="n in list"
+                :key="n.id"
                 cols="12" 
                 md="2">
                     <v-card 
@@ -35,7 +35,7 @@
     </v-container>
 </template>
 <script>
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from "vue-router";
 import { getAnimes } from "../api/anime";
 
@@ -44,13 +44,17 @@ export default defineComponent({
         const router = useRouter()
         const list = ref([])
         const page = ref(1)
-        const lengthOfPage = ref(0)
-        const totalCount = 18
+        const lengthOfPage = ref(1)
+        const totalCount = 20
 
-        onMounted(async () => {
-            list.value = await getAnimes()
-            lengthOfPage.value = (list.value.length / totalCount) + 1
-        })
+        const fetchAnimes = async () => {
+            const response = await getAnimes(page.value, totalCount)
+            list.value = response.message || []
+            lengthOfPage.value = response.total_pages || 1
+        }
+
+        onMounted(fetchAnimes)
+        watch(page, fetchAnimes)
 
         const clickAnime = (id) => {
             router.push({path: `/anime/${id}`})
