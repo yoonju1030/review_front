@@ -45,12 +45,12 @@ export default defineComponent({
         const list = ref([])
         const page = ref(1)
         const lengthOfPage = ref(1)
-        const totalCount = 20
+        const totalCount = 24
 
         const fetchAnimes = async () => {
             const response = await getAnimes(page.value, totalCount)
             list.value = response.message || []
-            lengthOfPage.value = response.total_pages || 1
+            lengthOfPage.value = response.pagination?.total_pages || 1
         }
 
         onMounted(fetchAnimes)

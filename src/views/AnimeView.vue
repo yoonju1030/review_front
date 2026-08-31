@@ -88,8 +88,8 @@
                     <v-row align="center" justify="center">
                         <v-col cols="11">
                             <div class="ma-2" 
-                            v-for="review in reviews.slice((page-1)*5, page*5)"
-                            :key="review">
+                            v-for="review in reviews"
+                            :key="review.id">
                                 <v-card
                                 :title="review.id"
                                 :subtitle="review.time"
@@ -121,7 +121,7 @@
     </v-overlay>
 </template>
 <script>
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router";
 import { postAnime, createCommentAPI, getComments } from "../api/anime"; 
 import { useStore } from "vuex";
@@ -136,15 +136,27 @@ export default defineComponent({
         const infoView = ref([])
         const reviews = ref([])
         const page = ref(1)
-        const lengthOfPage = ref(0)
+        const pageSize = 20
+        const lengthOfPage = ref(1)
         const loginDialog = ref(false)
         const logoutDialog = ref(false)
         const overlay = ref(false)
         const comment = ref("")
+
+        const fetchComments = async () => {
+            const response = await getComments(
+                {animeId: Number(id.value)},
+                page.value,
+                pageSize
+            )
+
+            reviews.value = response.result || []
+            lengthOfPage.value = response.pagination?.total_pages || 1
+        }
+
         onMounted(async () => {
             id.value = route.path.split("/")[2]
             let result = await postAnime({"id": id.value})
-            let reviewArray = await getComments({"animeId": id.value})
             console.log(result)
             animeInfo.value = result
             tags.value = animeInfo.value.tags
@@ -155,9 +167,10 @@ export default defineComponent({
                 }
             })
 
-            reviews.value = reviewArray
-            lengthOfPage.value = (reviews.value.length / 5) + 1
+            await fetchComments()
         })
+
+        watch(page, fetchComments)
 
         const createComment = async () => {
             const tokenInfo = store.getters['userStore/getToken']
